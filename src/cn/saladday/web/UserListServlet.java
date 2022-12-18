@@ -15,11 +15,12 @@ public class UserListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //1.调用UserService来查询
-        UserService userService = new UserServiceImpl();
-        List<User> allUsers = userService.findAll();
-        //此时已经拿到了Users的集合，需要封装给request对象进行转发
-        request.setAttribute("allUsers",allUsers);
-        request.getRequestDispatcher("/list.jsp").forward(request,response);
+//        UserService userService = new UserServiceImpl();
+//        List<User> allUsers = userService.findAll();
+//        //此时已经拿到了Users的集合，需要封装给request对象进行转发
+//        request.setAttribute("allUsers",allUsers);
+//        request.getRequestDispatcher("/list.jsp").forward(request,response);
+        request.getRequestDispatcher("/findUserByPageServlet").forward(request,response);
 
     }
 

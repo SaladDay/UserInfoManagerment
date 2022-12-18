@@ -101,18 +101,21 @@
 <div class="container">
   <h3 style="text-align: center">用户信息列表</h3>
   <div style="float: left;margin: 5px;">
-    <form class="form-inline">
+    <form class="form-inline" action="${pageContext.request.contextPath}/findUserByPageServlet" method="post">
       <div class="form-group">
-        <label for="exampleInputName2">Name</label>
-        <input type="text" class="form-control" id="exampleInputName2">
+        <label for="exampleInputName2">姓名</label>
+        <input type="text" name="name" class="form-control"
+               value="${requestScope.condition.name[0]==null?"":requestScope.condition.name[0]}" id="exampleInputName2">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail2">籍贯</label>
-        <input type="text" class="form-control" id="exampleInputEmail2">
+        <input type="text" name="address" class="form-control"
+               value="${requestScope.condition.address[0]==null ?"":requestScope.condition.address[0]}" id="exampleInputEmail2">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail3">邮箱</label>
-        <input type="email" class="form-control" id="exampleInputEmail3">
+        <input type="email" name="email" class="form-control"
+                value="${requestScope.condition.email[0]==null?"":requestScope.condition.email[0]}" id="exampleInputEmail3">
       </div>
       <button type="submit" class="btn btn-default">查找</button>
     </form>
@@ -136,7 +139,7 @@
         <th>邮箱</th>
         <th>操作</th>
       </tr>
-      <c:forEach items="${requestScope.allUsers}" var="user" varStatus="s">
+      <c:forEach items="${requestScope.pageBean.list}" var="user" varStatus="s">
         <tr>
 <%--          此时在域对象中有user，因此可以用复选框将user.id提交上去--%>
           <th><input class="user" type="checkbox" name="multiCheck" value="${user.id}"></th>
@@ -159,23 +162,56 @@
   <div >
     <nav aria-label="Page navigation">
       <ul class="pagination">
-        <li>
-          <a href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li>
-          <a href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
+
+
+        <c:if test="${requestScope.pageBean.currentPage == 1}">
+          <li class="disabled">
+            <span href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=${requestScope.pageBean.currentPage-1}&rows=5&name=${requestScope.condition.name[0]}&address=${requestScope.condition.address[0]}&email=${requestScope.condition.email[0]}"
+               aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </span>
+          </li>
+        </c:if>
+        <c:if test="${requestScope.pageBean.currentPage != 1}">
+          <li>
+            <a href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=${requestScope.pageBean.currentPage-1}&rows=5&name=${requestScope.condition.name[0]}&address=${requestScope.condition.address[0]}&email=${requestScope.condition.email[0]}"
+               aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        </c:if>
+
+
+
+        <c:forEach begin="1" end="${requestScope.pageBean.totalPage}" var="i">
+          <c:if test="${requestScope.pageBean.currentPage == i}">
+            <li class="active"><a href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=${i}&&rows=5&name=${requestScope.condition.name[0]}&address=${requestScope.condition.address[0]}&email=${requestScope.condition.email[0]}">${i}</a></li>
+          </c:if>
+          <c:if test="${requestScope.pageBean.currentPage != i}">
+            <li ><a href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=${i}&&rows=5&name=${requestScope.condition.name[0]}&address=${requestScope.condition.address[0]}&email=${requestScope.condition.email[0]}">${i}</a></li>
+          </c:if>
+        </c:forEach>
+
+        <c:if test="${requestScope.pageBean.currentPage == requestScope.pageBean.totalPage}">
+          <li class="disabled">
+            <span href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=${requestScope.pageBean.currentPage+1}&rows=5&name=${requestScope.condition.name[0]}&address=${requestScope.condition.address[0]}&email=${requestScope.condition.email[0]}"
+               aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </span>
+          </li>
+        </c:if>
+        <c:if test="${requestScope.pageBean.currentPage != requestScope.pageBean.totalPage}">
+          <li>
+            <a href="${pageContext.request.contextPath}/findUserByPageServlet?currentPage=${requestScope.pageBean.currentPage+1}&rows=5&name=${requestScope.condition.name[0]}&address=${requestScope.condition.address[0]}&email=${requestScope.condition.email[0]}"
+               aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </c:if>
+
+
         <span style="font-size: 25px;margin-left: 15px;">
-          共16条记录，4页
+          共${requestScope.pageBean.totalCount}条记录，${requestScope.pageBean.totalPage}页
         </span>
       </ul>
     </nav>

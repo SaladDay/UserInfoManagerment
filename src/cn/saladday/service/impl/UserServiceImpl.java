@@ -2,10 +2,12 @@ package cn.saladday.service.impl;
 
 import cn.saladday.dao.UserDao;
 import cn.saladday.dao.impl.UserDaoImpl;
+import cn.saladday.domain.PageBean;
 import cn.saladday.domain.User;
 import cn.saladday.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理的业务逻辑层实现
@@ -62,6 +64,21 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public PageBean<User> findUserByPage(int currentPage, int rows, Map<String, String[]> condition) {
+        //调用dao下的getTotalCount获得记录总数
+        int totalCount = dao.getTotalCount(condition);
+
+        //计算得到totalPage
+        int totalPage = totalCount % rows == 0?totalCount / rows:(totalCount / rows)+1;
+        //计算得到startIndex = (currentPage-1)*rows
+        int startIndex = (currentPage-1)*rows;
+        //调用dao下的List<User> findByPage(int startIndex,int rows);
+        List<User> list = dao.findByPage(startIndex, rows,condition);
+        PageBean<User> pageBean = new PageBean<User>(totalCount,totalPage,list,currentPage,rows);
+        return pageBean;
     }
 
 

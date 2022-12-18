@@ -1,8 +1,10 @@
 package cn.saladday.service;
 
+import cn.saladday.domain.PageBean;
 import cn.saladday.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理的业务逻辑层接口
@@ -42,4 +44,14 @@ public interface UserService {
      * @return
      */
     public boolean deleteMultiById(List<Integer> ids);
+
+    /**
+     * 分页功能
+     *
+     * @param currentPage
+     * @param rows
+     * @param condition 查询条件
+     * @return
+     */
+    public PageBean<User> findUserByPage(int currentPage, int rows, Map<String, String[]> condition);
 }
