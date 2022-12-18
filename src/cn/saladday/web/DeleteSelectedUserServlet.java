@@ -20,6 +20,8 @@ public class DeleteSelectedUserServlet extends HttpServlet {
         //设置编码获取数据
         request.setCharacterEncoding("utf-8");
         String[] idsStr = request.getParameterValues("multiCheck");
+        //如果前端出错了，没有数据传来；
+        if(idsStr == null)return;
         List<Integer> ids = new ArrayList<Integer>();
         for (String s : idsStr) {
             ids.add(Integer.parseInt(s));

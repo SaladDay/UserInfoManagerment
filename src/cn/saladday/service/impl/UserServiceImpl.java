@@ -49,15 +49,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteMultiById(List<Integer> ids) {
-        try {
-            for (Integer id : ids) {
-                dao.delete(id);
+
+        if(ids!=null && !ids.isEmpty()) {
+            try {
+                for (Integer id : ids) {
+                    dao.delete(id);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 

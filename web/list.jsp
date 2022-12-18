@@ -52,7 +52,10 @@
     function check(){
       var flag = false;
       for(let i =0;i<user.length;i++){
-        if(user[i].checked===true)flag=true;
+        if(user[i].checked===true){
+          flag=true;
+          break;
+        }
       }
       if(flag){
         document.getElementById("checkBoxForm").submit();
